@@ -1,0 +1,17 @@
+{
+  "name": "schedule",
+  "version": "1.0.0",
+  "description": "setup time start job (use moment)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tinasoft",
+  "license": "ISC",
+  "dependencies": {
+    "debug": "^4.1.1",
+    "moment": "^2.24.0",
+    "node-schedule": "^1.3.2",
+    "cron-parser": "latest"
+  }
+}
