@@ -18,9 +18,9 @@
  *
  */
 
-const schedule = require('node-schedule');
+const index = require('node-schedule');
 const moment = require("moment");
-const debug = require("debug")("debug:schedule");
+const debug = require("debug")("debug:index");
 const parser = require('cron-parser');
 
 //Var global
@@ -90,7 +90,7 @@ function setTimeToDoJob(jobId, datetime, job, ...arg) {
 		let setTime = new Date(mm.year(), mm.month(), mm.date(), mm.hour(), mm.minute(), mm.second());
 		console.log(`Now: ${moment().format("YYYY-MM-DD HH:mm:ss")}`);
 		console.log(`Time cron job: ${setTime}`);
-		schedule.scheduleJob(jobId, setTime, job.bind(null, ...arg));
+		index.scheduleJob(jobId, setTime, job.bind(null, ...arg));
 		return [null, jobId]
 	} catch (e) {
 		debug(e);
@@ -129,11 +129,11 @@ function setTimeToDoJobEveryDayOfWeb(jobId, datetime, job, ...arg) {
 		let checkJobId = checkIsJobIdExist(jobId);
 		if (checkJobId) return [checkJobId];
 		//validator
-		let rule = new schedule.RecurrenceRule();
+		let rule = new index.RecurrenceRule();
 		rule.dayOfWeek = [...datetime.dayOfWeek];
 		rule.hour = datetime.hour;
 		rule.minute = datetime.minute;
-		schedule.scheduleJob(jobId, rule, job.bind(null, ...arg));
+		index.scheduleJob(jobId, rule, job.bind(null, ...arg));
 		return [null, jobId]
 	} catch (e) {
 		debug(e);
@@ -153,7 +153,7 @@ function convertNextInvocationToDate(func) {
  */
 
 function getListScheduleJob() {
-	let list = schedule.scheduledJobs;
+	let list = index.scheduledJobs;
 	if (typeof list !== "object") return [];
 
 	let listDetailJob = Object.values(list);
@@ -176,10 +176,10 @@ function getListScheduleJob() {
  */
 
 function cancelScheduleJob(jobId) {
-	let list = schedule.scheduledJobs;
+	let list = index.scheduledJobs;
 	let arrayJob = Object.keys(list);
 	if (arrayJob.includes(jobId)) {
-		let job = schedule.scheduledJobs[jobId];
+		let job = index.scheduledJobs[jobId];
 		job.cancel();
 	}
 }
@@ -190,13 +190,13 @@ function cancelScheduleJob(jobId) {
 
 function optimalSchedule() {
 	try {
-		let list = schedule.scheduledJobs;
+		let list = index.scheduledJobs;
 		let listDetailJob = Object.values(list);
 		if (listDetailJob.length > 0) {
 			for (let i = 0; i < listDetailJob.length; i++) {
 				if (!listDetailJob[i].nextInvocation()) {
 					console.log("Delete jobId: " + listDetailJob[i].name);
-					let job = schedule.scheduledJobs[listDetailJob[i].name];
+					let job = index.scheduledJobs[listDetailJob[i].name];
 					job.cancel();
 				}
 			}
